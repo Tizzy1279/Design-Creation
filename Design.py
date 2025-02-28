@@ -6,6 +6,7 @@ import io
 import traceback
 import sys
 from dotenv import load_dotenv
+from spellchecker import SpellChecker
 
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
@@ -23,10 +24,22 @@ def execute_with_error_handling(func, *args, **kwargs):
         print(str(e))
         traceback.print_exc()
 
+def correct_spelling(description):
+    spell = SpellChecker()
+    words = description.split()
+    corrected_words = []
+    for word in words:
+        corrected_word = spell.correction(word)
+        print(f"Original: {word}, Corrected: {corrected_word}")  # Debugging
+        corrected_words.append(corrected_word)
+    corrected_description = ' '.join(corrected_words)
+    return corrected_description
+
 # Create a function named generate_image
 def generate_image(description):
     try:
-        prompt = f"{description}. No text."
+        description = correct_spelling(description)
+        prompt = f"High-quality, detailed image of {description}. No text."
         print(f"Prompt: {prompt}")  # Debugging
         response = openai.Image.create(
             prompt=prompt,
