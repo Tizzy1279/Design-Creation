@@ -1,5 +1,4 @@
 openai==0.28
-openai gradio
 gradio
 python-dotenv
 #pip install -r requirements.txt

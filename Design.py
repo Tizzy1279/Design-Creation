@@ -9,6 +9,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
+
+if not api_key:
+    raise ValueError("No API key provided. Please set the OPENAI_API_KEY environment variable.")
+
 openai.api_key = api_key
 
 def execute_with_error_handling(func, *args, **kwargs):
@@ -24,7 +28,7 @@ def generate_image(description):
     try:
         prompt = f"{description}. No text."
         print(f"Prompt: {prompt}")  # Debugging
-        response = openai.Image.create_variation(
+        response = openai.Image.create(
             prompt=prompt,
             n=1,
             size="512x512"
