@@ -7,11 +7,9 @@ import traceback
 import sys
 from dotenv import load_dotenv
 
-
 load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
-
 
 def execute_with_error_handling(func, *args, **kwargs):
     try:
@@ -21,16 +19,19 @@ def execute_with_error_handling(func, *args, **kwargs):
         print(str(e))
         traceback.print_exc()
 
-# create function named generate_image
+# Create a function named generate_image
 def generate_image(description):
     try:
         prompt = f"{description}. No text."
-        response = openai.Image.create(
+        print(f"Prompt: {prompt}")  # Debugging
+        response = openai.Image.create_variation(
             prompt=prompt,
             n=1,
             size="512x512"
         )
+        print(f"Response: {response}")  # Debugging
         image_url = response['data'][0]['url']
+        print(f"Image URL: {image_url}")  # Debugging
         image_response = requests.get(image_url)
         img = Image.open(io.BytesIO(image_response.content))
         return img
